@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 export default function Main() {
+  // State per la lista degli articoli
   const [articlesList, setArticlesList] = useState([
     {
       title: `Risparmia oggi`
@@ -15,6 +16,7 @@ export default function Main() {
     }
   ]);
 
+  // State per aggiungere e rimuovere articoli
   const [newArticle, setNewArticle] = useState(``);
 
   const handleAddArticle = (e) => {
@@ -23,6 +25,11 @@ export default function Main() {
     const newArticlesList = [...articlesList, { title: newArticle }];
     setArticlesList(newArticlesList);
     setNewArticle(``);
+  }
+
+  const handleDeleteArticle = (indexToDelete) => {
+    const newArticlesList = articlesList.filter((article, index) => index !== indexToDelete);
+    setArticlesList(newArticlesList);
   }
 
   return (
@@ -44,7 +51,13 @@ export default function Main() {
         <div className="articles">
           <ul>
           {articlesList.map((article, index) => (
-            <li key={index}>{article.title}</li>
+            <li className="d-flex justify-content-between align-items-center" key={index}>
+              <div className="article">{article.title}</div>
+              <div className="buttons d-flex">
+                <button className="btn fs-5" ><i class="fa-solid fa-pencil"></i></button>
+                <button className="btn fs-4" onClick={() => handleDeleteArticle(index)}><i class="fa-solid fa-xmark text-danger"></i></button>
+              </div>
+            </li>
           ))}
         </ul>
         </div>
