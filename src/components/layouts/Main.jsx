@@ -1,37 +1,50 @@
 import { useState } from "react"
 
 export default function Main() {
-  const [articles, setarticles] = useState([
+  const [articlesList, setArticlesList] = useState([
     {
-      id: 1,
       title: `Risparmia oggi`
     },
 
     {
-      id: 2,
       title: `Viaggi low-cost`
     },
 
     {
-      id: 3,
       title: `Ordina la casa`
     }
   ]);
+
+  const [newArticle, setNewArticle] = useState(``);
+
+  const handleAddArticle = (e) => {
+    e.preventDefault();
+
+    const newArticlesList = [...articlesList, { title: newArticle }];
+    setArticlesList(newArticlesList);
+    setNewArticle(``);
+  }
 
   return (
     <main>
       <div className="container">
         <h1 className="my-3">Lista Articoli</h1>
 
-        <form className="d-flex" action="">
-          <input className="form-control mx-3" type="text" placeholder="Nuovo Articolo"/>
+        <form className="d-flex" onSubmit={handleAddArticle}>
+          <input 
+            className="form-control mx-3" 
+            type="text" 
+            value={newArticle} 
+            onChange={(e) => setNewArticle(e.target.value)}
+            placeholder="Nuovo Articolo"
+          />
           <button className="btn btn-primary fs-5 fw-bold" type="submit">Add</button>
         </form>
 
         <div className="articles">
           <ul>
-          {articles.map((article) => (
-            <li key={article.id}>{article.title}</li>
+          {articlesList.map((article, index) => (
+            <li key={index}>{article.title}</li>
           ))}
         </ul>
         </div>
