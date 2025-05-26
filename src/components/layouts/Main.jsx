@@ -19,6 +19,10 @@ export default function Main() {
   // State per aggiungere e rimuovere articoli
   const [newArticle, setNewArticle] = useState(``);
 
+  // States per la modifica di un articolo
+  const [editArticle, setEditArticle] = useState(``);
+  const [editIndex, setEditIndex] = useState(null);
+
   const handleAddArticle = (e) => {
     e.preventDefault();
 
@@ -30,6 +34,14 @@ export default function Main() {
   const handleDeleteArticle = (indexToDelete) => {
     const newArticlesList = articlesList.filter((article, index) => index !== indexToDelete);
     setArticlesList(newArticlesList);
+  }
+
+  const handleUpdateArticle = (index) => {
+    const updatedArticles = [...articlesList];
+    updatedArticles[index] = {title: editArticle};
+    setArticlesList(updatedArticles);
+    setEditIndex(null);
+    setEditArticle(``);
   }
 
   return (
@@ -51,15 +63,31 @@ export default function Main() {
         <div className="articles">
           <ul>
           {articlesList.map((article, index) => (
-            <li className="d-flex justify-content-between align-items-center" key={index}>
-              <div className="article">{article.title}</div>
-              <div className="buttons d-flex">
-                <button className="btn fs-5" ><i class="fa-solid fa-pencil"></i></button>
-                <button className="btn fs-4" onClick={() => handleDeleteArticle(index)}><i class="fa-solid fa-xmark text-danger"></i></button>
-              </div>
+            <li className="d-flex align-items-center" key={index}>
+              {editIndex === index ? (
+                <>
+                  <input 
+                    type="text"
+                    value={editArticle} 
+                    onChange={(e) => setEditArticle(e.target.value)}  
+                  />
+                  <button className="btn fs-4" onClick={() => handleUpdateArticle(index)}><i class="fa-solid fa-floppy-disk"></i></button>
+                </>
+              ) : (
+                <>
+                  <div className="article">{article.title}</div>
+                  <button 
+                    className="btn" 
+                    onClick={() => {
+                    setEditIndex(index);
+                    setEditArticle(article.title);
+                  }}><i class="fa-solid fa-pencil"></i></button>
+                </>
+              )}
+              <button className="btn fs-4 text-end" onClick={() => handleDeleteArticle(index)}><i class="fa-solid fa-xmark text-danger"></i></button>
             </li>
           ))}
-        </ul>
+          </ul>
         </div>
       </div>
     </main>
